@@ -66,6 +66,7 @@ function addWorldMarker(x, z, iconUrl, title) {
         position: new google.maps.LatLng(z / 512 * 2, (x / 512 * 2) + offset),
         map: map,
         icon,
+        name: title,
         title: `${title} (${x},${z})`,
     });
 
@@ -121,7 +122,34 @@ function getWorldPosition(latLng) {
         z
     }
 }
+function appendWorldPointSidebar(x,z,icon,title) {
+    const sidebar = document.getElementById("worldPoints");
+    const player = document.createElement("li");
+    const avatar = document.createElement("div")
+    const avatarImg = document.createElement("img")
+    const username = document.createElement("div")
+    const position = document.createElement("div")
+    avatar.className = "avatar"
+    avatarImg.src = icon;
+    username.innerText = title;
+    username.className = "username"
+    position.className= "position"
+    position.innerHTML =
+    `
+    X: ${x}
+    Z: ${z}
+    `
+    avatar.appendChild(avatarImg);
+    player.append(avatar,username,position)
+    sidebar.append(player)
 
+    //On sidebar world list click. Pan to position on map.
+    player.addEventListener("click",() => {
+        const foundMarker = markerArray.find(marker => marker.name === title)
+        map.panTo(foundMarker.position);
+    })
+
+}
 /**
  *
  * @param {number} x - World X
@@ -155,16 +183,7 @@ function appendPlayerSidebar(x,z,userAvatar,name) {
         const foundMarker = markerArray.find(marker => marker.username === name)
         map.panTo(foundMarker.position);
     })
-    /*
-    <li>
-                    <div class="avatar"><img src="https://crafatar.com/avatars/6bc524049daf43389b299d76ce44f243"></div>
-                    <div class="username">TxRedneck</div>
-                    <div class="position">
-                        X:500
-                        Z:2000
-                    </div>
-                </li>
-    */
+
 }
 
 function initialize() {
@@ -259,6 +278,7 @@ function initialize() {
                 title
             }) => {
                 addWorldMarker(x, z, icon, title)
+                appendWorldPointSidebar(x,z,icon,title)
             })
         }).then
 
