@@ -254,7 +254,7 @@ function initialize() {
     map.setMapTypeId('overworld');
 
     // Gets block craft marker info from json host.
-    fetch("https://api.jsonbin.io/b/5f1dc6d9c1edc466175ec3e9/3")
+    fetch("https://api.jsonbin.io/b/5f1dc6d9c1edc466175ec3e9/4")
         .then(res => res.json())
         .then( ({
             world,
