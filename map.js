@@ -18,7 +18,7 @@ ProjectionCartesian.prototype.fromPointToLatLng = function (point, noWrap) {
  * @param {string} username - Minecraft username
  */
 function getPlayerAvatar(username) {
-    return fetch(`https://cors-anywhere.herokuapp.com/https://playerdb.co/api/player/minecraft/${username}`)
+    return fetch(`https://playerdb.co/api/player/minecraft/${username}`)
         .then(res => res.text())
         .then(text => JSON.parse(text))
         .then((ec) => {
@@ -254,7 +254,7 @@ function initialize() {
     map.setMapTypeId('overworld');
 
     // Gets block craft marker info from json host.
-    fetch("https://api.jsonbin.io/b/5f1dc6d9c1edc466175ec3e9/1")
+    fetch("https://api.jsonbin.io/b/5f1dc6d9c1edc466175ec3e9/3")
         .then(res => res.json())
         .then( ({
             world,
