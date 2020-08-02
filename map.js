@@ -18,7 +18,7 @@ ProjectionCartesian.prototype.fromPointToLatLng = function (point, noWrap) {
  * @param {string} username - Minecraft username
  */
 function getPlayerAvatar(username) {
-    return fetch(`https://playerdb.co/api/player/minecraft/${username}`)
+    return fetch(`https://cors-anywhere.herokuapp.com/https://playerdb.co/api/player/minecraft/${username}`)
         .then(res => res.text())
         .then(text => JSON.parse(text))
         .then((ec) => {
