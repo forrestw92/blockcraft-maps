@@ -46,6 +46,7 @@ function GenerateIcon(url) {
         url,
         size: new google.maps.Size(64, 64),
         scaledSize: new google.maps.Size(32, 32),
+        labelOrigin: new google.maps.Point(16, -16),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(16, 16),
     }
@@ -68,6 +69,12 @@ function addWorldMarker(x, z, iconUrl, title) {
         icon,
         name: title,
         title: `${title} (${x},${z})`,
+        label: {
+            text: title,
+            color: "white",
+            fontWeight: "bold",
+            fontSize: "16px"
+        }
     });
 
     const infowindow = new google.maps.InfoWindow({
@@ -87,7 +94,7 @@ function addWorldMarker(x, z, iconUrl, title) {
  * @param {string} avatar - Minecraft avatar url
  * @param {string} username - Minecraft username
  */
-async function addPlayerMarker(x, z, avatar,username) {
+async function addPlayerMarker(x, z, avatar, username) {
     const offset = 128;
     const icon = GenerateIcon(avatar)
     const marker = new google.maps.Marker({
@@ -96,6 +103,12 @@ async function addPlayerMarker(x, z, avatar,username) {
         icon,
         username,
         title: `${username} (${x},${z})`,
+        label: {
+            text: username,
+            color: "white",
+            fontWeight: "bold",
+            fontSize: "16px"
+        }
     });
     const infowindow = new google.maps.InfoWindow({
         content: `<span id="markerUsername">${username}</span>X: ${x}<br>Z: ${z}`,
@@ -122,7 +135,8 @@ function getWorldPosition(latLng) {
         z
     }
 }
-function appendWorldPointSidebar(x,z,icon,title) {
+
+function appendWorldPointSidebar(x, z, icon, title) {
     const sidebar = document.getElementById("worldPoints");
     const player = document.createElement("li");
     const avatar = document.createElement("div")
@@ -133,18 +147,18 @@ function appendWorldPointSidebar(x,z,icon,title) {
     avatarImg.src = icon;
     username.innerText = title;
     username.className = "username"
-    position.className= "position"
+    position.className = "position"
     position.innerHTML =
-    `
+        `
     X: ${x}
     Z: ${z}
     `
     avatar.appendChild(avatarImg);
-    player.append(avatar,username,position)
+    player.append(avatar, username, position)
     sidebar.append(player)
 
     //On sidebar world list click. Pan to position on map.
-    player.addEventListener("click",() => {
+    player.addEventListener("click", () => {
         const foundMarker = markerArray.find(marker => marker.name === title)
         map.panTo(foundMarker.position);
     })
@@ -157,7 +171,7 @@ function appendWorldPointSidebar(x,z,icon,title) {
  * @param {string} userAvatar - Minecraft avatar url
  * @param {string} name - Minecraft username
  */
-function appendPlayerSidebar(x,z,userAvatar,name) {
+function appendPlayerSidebar(x, z, userAvatar, name) {
     const sidebar = document.getElementById("playerlist");
     const player = document.createElement("li");
     const avatar = document.createElement("div")
@@ -168,18 +182,18 @@ function appendPlayerSidebar(x,z,userAvatar,name) {
     avatarImg.src = userAvatar;
     username.innerText = name;
     username.className = "username"
-    position.className= "position"
+    position.className = "position"
     position.innerHTML =
-    `
+        `
     X: ${x}
     Z: ${z}
     `
     avatar.appendChild(avatarImg);
-    player.append(avatar,username,position)
+    player.append(avatar, username, position)
     sidebar.append(player)
 
     //On sidebar player list click. Pan to position on map.
-    player.addEventListener("click",() => {
+    player.addEventListener("click", () => {
         const foundMarker = markerArray.find(marker => marker.username === name)
         map.panTo(foundMarker.position);
     })
@@ -256,7 +270,7 @@ function initialize() {
     // Gets block craft marker info from json host.
     fetch("https://api.jsonbin.io/b/5f1dc6d9c1edc466175ec3e9/4")
         .then(res => res.json())
-        .then( ({
+        .then(({
             world,
             bases
         }) => {
@@ -266,8 +280,8 @@ function initialize() {
                 username
             }) => {
                 getPlayerAvatar(username).then(avatar => {
-                    addPlayerMarker(x, z, avatar,username)
-                    appendPlayerSidebar(x,z,avatar,username)
+                    addPlayerMarker(x, z, avatar, username)
+                    appendPlayerSidebar(x, z, avatar, username)
                 });
 
             })
@@ -278,7 +292,7 @@ function initialize() {
                 title
             }) => {
                 addWorldMarker(x, z, icon, title)
-                appendWorldPointSidebar(x,z,icon,title)
+                appendWorldPointSidebar(x, z, icon, title)
             })
         }).then
 
